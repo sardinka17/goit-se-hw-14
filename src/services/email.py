@@ -23,6 +23,18 @@ conf = ConnectionConfig(
 
 
 async def send_email(email: EmailStr, username: str, host: str):
+    """
+    Send a verification email to the user.
+
+    :param email: The email address of the recipient.
+    :type email: EmailStr
+    :param username: The username of the recipient.
+    :type username: str
+    :param host: The host URL to be included in the email.
+    :type host: str
+    :return: Returns None.
+    :rtype: None
+    """
     try:
         token_verification = auth_service.create_email_token({'sub': email})
         message = MessageSchema(

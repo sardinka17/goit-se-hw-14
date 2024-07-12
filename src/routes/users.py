@@ -21,6 +21,14 @@ cloudinary.config(
 
 @router.get('/me/', response_model=UserDB)
 async def get_users_me(current_user: User = Depends(auth_service.get_current_user)):
+    """
+    Retrieve details of the current authenticated user.
+
+    :param current_user: The user making the request.
+    :type current_user: User
+    :return: The database model representing the details of the current user.
+    :rtype: UserDB
+    """
     return current_user
 
 
@@ -30,6 +38,18 @@ async def update_avatar_user(
         current_user: User = Depends(auth_service.get_current_user),
         db: Session = Depends(get_postgres_db)
 ):
+    """
+    Retrieve details of the current authenticated user.
+
+    :param file: The avatar image file to upload.
+    :type file: UploadFile
+    :param current_user: The user to update avatar for.
+    :type current_user: User
+    :param db: The database session.
+    :type db: Session
+    :return: The updated database model representing the details of the current user with the new avatar.
+    :rtype: UserDB
+    """
     public_id = f'ContactsApp/{current_user.email}'
     resource = cloudinary.uploader.upload(file.file, public_id=public_id, owerite=True)
     resource_url = cloudinary.CloudinaryImage(public_id).build_url(

@@ -22,6 +22,20 @@ async def get_all_contacts(
         current_user: User = Depends(auth_service.get_current_user),
         db: Session = Depends(get_postgres_db)
 ) -> list[ContactModel]:
+    """
+    Retrieves a list of contacts for a specific user with specified pagination parameters.
+
+    :param offset: The number of contacts to skip.
+    :type offset: int
+    :param limit: The maximum number of contacts to return.
+    :type limit: int
+    :param current_user: The user to retrieve contacts for.
+    :type current_user: User
+    :param db: The database session.
+    :type db: Session
+    :return: A list of contacts for the current user.
+    :rtype: list[ContactModel]
+    """
     contacts = await repository_contacts.get_all_contacts(offset, limit, current_user, db)
 
     return contacts
@@ -33,6 +47,18 @@ async def get_contact(
         current_user: User = Depends(auth_service.get_current_user),
         db: Session = Depends(get_postgres_db)
 ) -> ContactResponse:
+    """
+    Retrieve a specific contact for the current user by contact ID.
+
+    :param contact_id: The ID of the contact to retrieve. Must be greater than or equal to 1.
+    :type contact_id: int
+    :param current_user: The user to retrieve contact for.
+    :type current_user: User
+    :param db: The database session.
+    :type db: Session
+    :return: The retrieved contact details.
+    :rtype: ContactResponse
+    """
     contact = await repository_contacts.get_contact(contact_id, current_user, db)
 
     if not contact:
@@ -52,6 +78,18 @@ async def create_contact(
         current_user: User = Depends(auth_service.get_current_user),
         db: Session = Depends(get_postgres_db)
 ) -> ContactResponse:
+    """
+    Create a new contact for the current user.
+
+    :param body: The data schema for creating a new contact.
+    :type body: ContactCreate
+    :param current_user: The user to create contact for.
+    :type current_user: User
+    :param db: The database session.
+    :type db: Session
+    :return: The newly created contact details.
+    :rtype: ContactResponse
+    """
     return await repository_contacts.create_contact(body, current_user, db)
 
 
@@ -62,6 +100,20 @@ async def update_contact(
         current_user: User = Depends(auth_service.get_current_user),
         db: Session = Depends(get_postgres_db)
 ) -> ContactResponse:
+    """
+    Updates a single contact with the specified ID for a specific user.
+
+    :param contact_id: The ID of the contact to update.
+    :type contact_id: int
+    :param body: The data schema containing the updated contact information.
+    :type body: ContactResponse
+    :param current_user: The user to update contact for.
+    :type current_user: User
+    :param db: The database session.
+    :type db: Session
+    :return: The updated contact details.
+    :rtype: ContactResponse
+    """
     contact = await repository_contacts.update_contact(contact_id, body, current_user, db)
 
     if not contact:
@@ -76,6 +128,18 @@ async def delete_contact(
         current_user: User = Depends(auth_service.get_current_user),
         db: Session = Depends(get_postgres_db)
 ):
+    """
+    Delete a contact for the current user by contact ID.
+
+    :param contact_id: The ID of the contact to delete.
+    :type contact_id: int
+    :param current_user: The user to delete contact for.
+    :type current_user: User
+    :param db: The database session.
+    :type db: Session
+    :return: The removed contact, or None if it does not exist.
+    :rtype: Contact | None
+    """
     contact = await repository_contacts.delete_contact(contact_id, current_user, db)
 
     if not contact:
@@ -90,6 +154,18 @@ async def get_contact_by_first_name(
         current_user: User = Depends(auth_service.get_current_user),
         db: Session = Depends(get_postgres_db)
 ) -> ContactResponse:
+    """
+    Retrieve a contact for the current user by their first name.
+
+    :param contact_first_name: The first name of the contact to search for.
+    :type contact_first_name: str
+    :param current_user: The user to retrieve contact by contact's first name for.
+    :type current_user: User
+    :param db: The database session.
+    :type db: Session
+    :return: The retrieved contact details.
+    :rtype: ContactResponse
+    """
     contact = await repository_contacts.get_contact_by_first_name(contact_first_name, current_user, db)
 
     if not contact:
@@ -104,6 +180,18 @@ async def get_contact_by_last_name(
         current_user: User = Depends(auth_service.get_current_user),
         db: Session = Depends(get_postgres_db)
 ) -> ContactResponse:
+    """
+    Retrieve a contact for the current user by their last name.
+
+    :param contact_last_name: The last name of the contact to search for.
+    :type contact_last_name: str
+    :param current_user: The user to retrieve contact by contact's last name for.
+    :type current_user: User
+    :param db: The database session.
+    :type db: Session
+    :return: The retrieved contact details.
+    :rtype: ContactResponse
+    """
     contact = await repository_contacts.get_contact_by_last_name(contact_last_name, current_user, db)
 
     if not contact:
@@ -118,6 +206,18 @@ async def get_contact_by_email(
         current_user: User = Depends(auth_service.get_current_user),
         db: Session = Depends(get_postgres_db)
 ) -> ContactResponse:
+    """
+    Retrieve a contact for the current user by their email address.
+
+    :param contact_email: The email address of the contact to search for.
+    :type contact_email: str
+    :param current_user: The user to retrieve contact by contact's email for.
+    :type current_user: User
+    :param db: The database session.
+    :type db: Session
+    :return: The retrieved contact details.
+    :rtype: ContactResponse
+    """
     contact = await repository_contacts.get_contact_by_email(contact_email, current_user, db)
 
     if not contact:
@@ -131,6 +231,16 @@ async def get_contacts_upcoming_birthdays(
         current_user: User = Depends(auth_service.get_current_user),
         db: Session = Depends(get_postgres_db)
 ):
+    """
+    Retrieve contacts with upcoming birthdays for the current user.
+
+    :param current_user: The user to retrieve contacts upcoming birthdays for.
+    :type current_user: User
+    :param db: The database session.
+    :type db: Session
+    :return: A list of contacts with upcoming birthdays.
+    :rtype: list[Contact]
+    """
     contacts = await repository_contacts.get_contacts_upcoming_birthdays(current_user, db)
 
     return contacts
